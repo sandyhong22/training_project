@@ -8,6 +8,7 @@ import com.example.backend_project.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +44,8 @@ public class LoginService {
 
 
         loginResponse.setToken(jwtToken);
-
         return loginResponse;
 
     }
+
 }
