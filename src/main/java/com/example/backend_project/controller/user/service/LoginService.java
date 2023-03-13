@@ -41,10 +41,6 @@ public class LoginService {
                 .signWith(SignatureAlgorithm.HS512, "MySecret")
                 .compact();
 
-        float f1 = 22.30f;
-        float f2 = 88.67f;
-        int retval = Float.compare(f1, f2);
-
 
         loginResponse.setToken(jwtToken);
 
