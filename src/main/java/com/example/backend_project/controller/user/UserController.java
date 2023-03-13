@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.message.AuthException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +36,8 @@ public class UserController {
     LoginService loginService;
 
     @GetMapping("/account")
-    public ResponseDto<List<User>> getAllAccount() {
-        return ResponseDto.success(accountService.getAllAccount());
+    public ResponseDto<List<User>> getAllAccount(HttpServletRequest request) throws AuthException {
+        return ResponseDto.success(accountService.getAllAccount(request));
     }
 
 
@@ -46,18 +48,18 @@ public class UserController {
 
 
     @GetMapping("/account/username/{username}")
-    public ResponseDto<UserRegisterResponse> findByUsername(@PathVariable("username") String username) {
+    public ResponseDto<UserRegisterResponse> findByUsername(HttpServletRequest request,@PathVariable("username") String username) throws AuthException {
         log.info("username{}", username);
-        return ResponseDto.success(userFindByUsername.findByUsername(username));
+        return ResponseDto.success(userFindByUsername.findByUsername(request,username));
     }
 
     @GetMapping("/account/userId/{userId}")
-    public ResponseDto<Optional<User>> findById(@PathVariable("userId") Long userId) {
-        return ResponseDto.success(userFindByIdService.findById(userId));
+    public ResponseDto<Optional<User>> findById(HttpServletRequest request,@PathVariable("userId") Long userId) throws AuthException {
+        return ResponseDto.success(userFindByIdService.findById(request,userId));
     }
 
     @PostMapping("/login")
-    public ResponseDto<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseDto<LoginResponse> login(@RequestBody LoginRequest loginRequest)  {
         return ResponseDto.success(loginService.login(loginRequest));
     }
 }
