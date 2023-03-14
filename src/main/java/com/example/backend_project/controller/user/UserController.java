@@ -42,7 +42,6 @@ public class UserController {
     
     @GetMapping("/account/username/{username}")
     public ResponseDto<UserResponse> findByUsername(@PathVariable("username") String username) {
-        log.info("username{}", username);
         return ResponseDto.success(userFindByUsername.findByUsername(username));
     }
     
