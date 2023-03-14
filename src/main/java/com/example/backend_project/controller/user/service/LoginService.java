@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final UserRepository userRepository;
     private final JWTService jwtService;
+    private final UserMapper userMapper;
     
     public LoginResponse login(LoginRequest loginRequest) {
         Boolean userIsExist = userRepository.existsByUsername(loginRequest.getUsername());
@@ -25,7 +26,7 @@ public class LoginService {
         if (Boolean.FALSE.equals(userIsExist)) {
             throw new LoginException();
         }
-        User user = userRepository.findByUsername(loginRequest.getUsername());
+        User user = userMapper.findByUsername(loginRequest.getUsername());
         boolean checkPassword = BCrypt.checkpw(loginRequest.getPassword(), user.getPassword());
         LoginResponse loginResponse = new LoginResponse();
         if (checkPassword) {
