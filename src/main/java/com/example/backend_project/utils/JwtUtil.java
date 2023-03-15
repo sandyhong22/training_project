@@ -5,7 +5,7 @@ import com.example.backend_project.expection.AuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +13,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Component
 @Slf4j
-public class JWTService {
+public class JwtUtil {
     private static final String KEY = "eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoic3NzIiwiZW1haWwiOiJ0ZXN0dCIsInVzZXJuYW1lIjoic2FuZHl5eSIsImV4cCI6MT";
     
     public Claims decodeToken(HttpServletRequest request) throws AuthException {
