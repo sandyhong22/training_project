@@ -1,25 +1,25 @@
 package com.example.backend_project.controller.user.dto.request;
 
-import com.sun.istack.NotNull;
+
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class UserRegisterRequest {
     @Column(name = "username")
-    @NotNull
+    @NotBlank
     private String username;
-
+    
     @Column(name = "email")
-    @NotNull
     private String email;
-
+    
     @Column(name = "name")
-    @NotNull
+    @NotBlank
     private String name;
-
+    
     @Column(name = "password")
-    @NotNull
+    @NotBlank
     private String password;
 }
