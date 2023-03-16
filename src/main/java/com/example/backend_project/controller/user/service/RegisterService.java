@@ -1,13 +1,16 @@
 package com.example.backend_project.controller.user.service;
 
 
+import com.example.backend_project.config.JwtService;
+import com.example.backend_project.controller.user.dto.reponse.LoginResponse;
 import com.example.backend_project.controller.user.dto.request.UserRegisterRequest;
 import com.example.backend_project.entity.User;
+import com.example.backend_project.enums.UserRole;
 import com.example.backend_project.expection.UserRegisterException;
 import com.example.backend_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,21 +21,26 @@ import java.time.LocalDateTime;
 public class RegisterService {
     
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     
-    public User register(UserRegisterRequest userRegisterRequest) {
+    private final JwtService jwtService;
+    
+    public LoginResponse register(UserRegisterRequest userRegisterRequest) {
         
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userRegisterRequest.getUsername()))) {
             throw new UserRegisterException();
         }
         User user = new User();
-        String encodedPassword = BCrypt.hashpw(userRegisterRequest.getPassword(), BCrypt.gensalt());
         user.setName(userRegisterRequest.getName());
         user.setEmail(userRegisterRequest.getEmail());
-        user.setPassword(encodedPassword);
+        user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
+        user.setRole(UserRole.ADMIN);
         user.setUsername(userRegisterRequest.getUsername());
         user.setCreatedDate(LocalDateTime.now());
         user.setLastModifiedDate(LocalDateTime.now());
         userRepository.save(user);
-        return user;
+        
+        String jwtToken = jwtService.generateToken(user);
+        return LoginResponse.builder().token(jwtToken).build();
     }
 }
