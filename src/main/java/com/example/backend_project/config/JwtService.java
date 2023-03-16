@@ -1,6 +1,5 @@
-package com.example.backend_project.utils;
+package com.example.backend_project.config;
 
-import com.example.backend_project.entity.User;
 import com.example.backend_project.expection.AuthenticationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -21,7 +20,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 @Component
 @Slf4j
@@ -86,30 +84,13 @@ public class JwtService {
     }
     
     public Claims getAllClaims(String token) {
-        return Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
     }
     
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = getAllClaims(token).get("sub").toString();
         return (username.equals(userDetails.getUsername()));
-//                && !isTokenExpired(token);
+        
     }
-
-//    public String extractUsername(String token) {
-//        return extractClaim(token, Claims::getSubject);
-//    }
-//
-//    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-//        final Claims claims = getAllClaims(token);
-//        return claims;
-//    }
-
-//    private boolean isTokenExpired(String token) {
-//        return extractExpiration(token).before(new Date());
-//    }
-//
-//    private Date extractExpiration(String token) {
-//        return extractClaim(token, Claims::getExpiration);
-//    }
     
 }
