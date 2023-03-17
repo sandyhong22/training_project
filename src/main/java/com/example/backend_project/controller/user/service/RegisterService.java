@@ -25,7 +25,7 @@ public class RegisterService {
     
     private final JwtService jwtService;
     
-    public LoginResponse register(UserRegisterRequest userRegisterRequest) {
+    public String register(UserRegisterRequest userRegisterRequest) {
         
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userRegisterRequest.getUsername()))) {
             throw new UserRegisterException();
@@ -40,7 +40,6 @@ public class RegisterService {
         user.setLastModifiedDate(LocalDateTime.now());
         userRepository.save(user);
         
-        String jwtToken = jwtService.generateToken(user);
-        return LoginResponse.builder().token(jwtToken).build();
+        return "registration success ";
     }
 }

@@ -29,7 +29,7 @@ public class AuthController {
     }
     
     @PostMapping("/register")
-    public ResponseDto<LoginResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+    public ResponseDto<String> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
         return ResponseDto.success(registerService.register(userRegisterRequest));
     }
 }
