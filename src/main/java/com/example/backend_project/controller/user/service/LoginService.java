@@ -8,7 +8,7 @@ import com.example.backend_project.expection.LoginException;
 import com.example.backend_project.expection.PasswordException;
 import com.example.backend_project.repository.UserMapper;
 import com.example.backend_project.repository.UserRepository;
-import com.example.backend_project.config.JwtService;
+import com.example.backend_project.config.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package com.example.backend_project.config;
+package com.example.backend_project.config.security;
 
 import com.example.backend_project.expection.AuthenticationException;
 import com.example.backend_project.expection.InvalidTokenException;

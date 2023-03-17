@@ -1,8 +1,7 @@
 package com.example.backend_project.controller.user.service;
 
 
-import com.example.backend_project.config.JwtService;
-import com.example.backend_project.controller.user.dto.reponse.LoginResponse;
+import com.example.backend_project.config.security.JwtService;
 import com.example.backend_project.controller.user.dto.request.UserRegisterRequest;
 import com.example.backend_project.entity.User;
 import com.example.backend_project.enums.UserRole;
