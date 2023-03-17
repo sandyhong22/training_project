@@ -1,12 +1,14 @@
 package com.example.backend_project.config;
 
 import com.example.backend_project.expection.AuthenticationException;
+import com.example.backend_project.expection.InvalidTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,8 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.example.backend_project.enums.ErrorCode.*;
 
 @Component
 @Slf4j
@@ -53,17 +57,19 @@ public class JwtService {
                 .compact();
     }
     
-    public void validateToken(String token) throws AuthException {
+    public void validateToken(String token){
         try {
             Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token);
         } catch (MalformedJwtException e) {
-            throw new AuthException("Invalid JWT token.");
+            throw new InvalidTokenException(INVALID_JWT_TOKEN, "Invalid JWT token");
         } catch (ExpiredJwtException e) {
-            throw new AuthException("Expired JWT token");
+            throw new InvalidTokenException(EXPIRED_JWT_TOKEN, "Expired JWT token");
         } catch (UnsupportedJwtException e) {
-            throw new AuthException("Unsupported JWT token");
+            throw new InvalidTokenException(UNSUPPORTED_JWT_TOKEN, "Unsupported JWT token");
         } catch (IllegalArgumentException e) {
-            throw new AuthException("JWT token compact of handler are invalid");
+            throw new InvalidTokenException(INVALID_JWT_COMPACT_HANDLER, "JWT token compact of handler is invalid");
+        } catch (Exception e) {
+            throw new InvalidTokenException(UNEXPECTED_JWT_TOKEN_ERROR, e.getMessage());
         }
     }
     
