@@ -23,8 +23,6 @@ public class SecurityConfiguration {
     
     private final JwtAuthenticationFilter jwtAuthFilter;
     
-    private final AuthenticationProvider authenticationProvider;
-    
     private final UnauthorizedHandler unauthorizedHandler;
     
     private static final String[] AUTH_WHITELIST = {
@@ -35,7 +33,7 @@ public class SecurityConfiguration {
             "/**/webjars/**",
             "/**/error",
             "/auth/**"
-            
+        
     };
     
     
@@ -47,11 +45,7 @@ public class SecurityConfiguration {
                 .authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        
-        http.authenticationProvider(authenticationProvider);
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         
         return http.build();
     }

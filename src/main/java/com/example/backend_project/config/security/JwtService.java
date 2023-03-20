@@ -57,7 +57,7 @@ public class JwtService {
                 .compact();
     }
     
-    public void validateToken(String token){
+    public void validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token);
         } catch (MalformedJwtException e) {
@@ -97,6 +97,14 @@ public class JwtService {
         final String username = getAllClaims(token).get("sub").toString();
         return (username.equals(userDetails.getUsername()));
         
+    }
+    
+    public String isSubValid(String token) {
+        if (getAllClaims(token).get("sub") == null) {
+            throw new AuthenticationException("JWT token don't have sub");
+        } else {
+            return getAllClaims(token).get("sub").toString();
+        }
     }
     
 }
