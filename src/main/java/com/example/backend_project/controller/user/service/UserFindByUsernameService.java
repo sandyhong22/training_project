@@ -7,11 +7,9 @@ import com.example.backend_project.expection.UserNotFoundException;
 import com.example.backend_project.repository.UserMapper;
 import com.example.backend_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class UserFindByUsernameService {
     private final UserRepository userRepository;
