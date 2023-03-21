@@ -8,8 +8,9 @@ import java.io.Serializable;
 
 @Value //for immutable class
 public class ResponseDto<T> implements Serializable {
-    private static final long serialVersionUID = -835337966903601804L;
-
+    
+    
+    private static final long serialVersionUID = 7670592515491406895L;
     Status status;
     T data;
 
@@ -29,9 +30,9 @@ public class ResponseDto<T> implements Serializable {
 
     @Value
     public static class Status implements Serializable {
-
-        private static final long serialVersionUID = 7210280386438901569L;
-
+    
+    
+        private static final long serialVersionUID = 1440057195675543637L;
         Integer code;
         String message;
     }
