@@ -19,11 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.backend_project.enums.ErrorCode.*;
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 @Component
 @Slf4j
@@ -31,6 +33,9 @@ public class JwtService {
     
     @Value("${jwt.secretKey}")
     private String secretKey;
+    
+    @Value("${jwt.expireHours}")
+    private Integer expireHours;
     
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -47,8 +52,8 @@ public class JwtService {
     ) {
         
         Date expireDate =
-                //set 24hr expire
-                new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
+                new Date(System.currentTimeMillis() + expireHours * 60 * 60 * 1000);
+        
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
