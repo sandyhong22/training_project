@@ -7,8 +7,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -28,10 +28,12 @@ import static com.example.backend_project.enums.ErrorCode.*;
 @Component
 @Slf4j
 public class JwtService {
-    private static final String KEY = "404E635266556A586E327235753878404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+    
+    @Value("${jwt.secretKey}")
+    private String secretKey;
     
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(KEY);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
     
