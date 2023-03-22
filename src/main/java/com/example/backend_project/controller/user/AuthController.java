@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class AuthController {
     
     @Operation(summary = "註冊")
     @PostMapping("/register")
-    public ResponseDto<String> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        return ResponseDto.success(registerService.register(userRegisterRequest));
+    public ResponseDto<String> register(HttpServletRequest request,@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        return ResponseDto.success(registerService.register(request,userRegisterRequest));
     }
 }
