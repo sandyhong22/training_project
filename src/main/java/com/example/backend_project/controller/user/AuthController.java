@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -35,7 +36,7 @@ public class AuthController {
     
     @Operation(summary = "註冊")
     @PostMapping("/register")
-    public ResponseDto<String> register(HttpServletRequest request,@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
-        return ResponseDto.success(registerService.register(request,userRegisterRequest));
+    public ResponseDto<String> register(Locale locale, @Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        return ResponseDto.success(registerService.register(locale, userRegisterRequest));
     }
 }
