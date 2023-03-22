@@ -25,19 +25,9 @@ public class LoginService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final UserMapper userMapper;
-    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     
     public LoginResponse login(LoginRequest loginRequest) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUsername(),
-                    loginRequest.getPassword()
-            ));
-            
-        } catch (AuthenticationException | DisabledException | LockedException e) {
-            throw new AuthenticationException(e.getMessage());
-        }
         Boolean userIsExist = userRepository.existsByUsername(loginRequest.getUsername());
         
         if (Boolean.FALSE.equals(userIsExist)) {
