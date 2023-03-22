@@ -1,6 +1,7 @@
 package com.example.backend_project.config.security;
 
 import com.example.backend_project.dto.ResponseDto;
+import com.example.backend_project.expection.InvalidTokenException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,15 @@ public class UnauthorizedHandler implements AuthenticationEntryPoint {
         
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        String code = "-1";
         
-        new ResponseDto.Status(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+        if (authException instanceof InvalidTokenException) {
+            code = ((InvalidTokenException) authException).getErrorCode().getCode();
+        }
         
-        jsonObjectMapper.writeValue(response.getOutputStream(), new ResponseDto.Status(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()));
+        jsonObjectMapper.writeValue(response.getOutputStream(), ResponseDto.fail(code, authException.getMessage()));
+        
     }
+    
     
 }

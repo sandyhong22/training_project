@@ -6,26 +6,22 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.security.auth.message.AuthException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Key;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.backend_project.enums.ErrorCode.*;
-import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 @Component
 @Slf4j
@@ -77,22 +73,6 @@ public class JwtService {
             throw new InvalidTokenException(INVALID_JWT_COMPACT_HANDLER, "JWT token compact of handler is invalid");
         } catch (Exception e) {
             throw new InvalidTokenException(UNEXPECTED_JWT_TOKEN_ERROR, e.getMessage());
-        }
-    }
-    
-    public String subJwtToken(@NonNull HttpServletRequest request,
-                              @NonNull HttpServletResponse response,
-                              @NonNull FilterChain filterChain) throws AuthException, ServletException, IOException {
-        final String requestTokenHeader = request.getHeader("Authorization");
-        
-        filterChain.doFilter(request, response);
-        
-        
-        if (StringUtils.isNotEmpty(requestTokenHeader) && requestTokenHeader.startsWith("Bearer")) {
-            return requestTokenHeader.substring(7);
-        } else {
-            log.error("URL does not has Bearer header {}", request.getRequestURL());
-            throw new AuthenticationException("INVALID_HEADER");
         }
     }
     
