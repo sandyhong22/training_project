@@ -42,6 +42,6 @@ public class RegisterService {
         user.setLastModifiedDate(LocalDateTime.now());
         userRepository.save(user);
         
-        return "registration success ";
+        return messageSource.getMessage("ER00005", null, "", request.getLocale());
     }
 }
