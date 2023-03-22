@@ -13,27 +13,30 @@ public class ResponseDto<T> implements Serializable {
     private static final long serialVersionUID = 7670592515491406895L;
     Status status;
     T data;
-
+    
     public static <T> ResponseDto<T> success(T data) {
-        return new ResponseDto<>(HttpStatus.OK.value(), data);
+        return new ResponseDto<>(String.valueOf(HttpStatus.OK.value()), data);
     }
-
-    public ResponseDto(int code, String message) {
+    
+    public static <T> ResponseDto<T> fail(String code,String message) {
+        return new ResponseDto<>(code,message);
+    }
+    
+    public ResponseDto(String code, String message) {
         this.status = new Status(code, message);
         this.data = null;
     }
-
-    private ResponseDto(int code, T data) {
+    
+    private ResponseDto(String code, T data) {
         this.status = new Status(code, null);
         this.data = data;
     }
-
+    
     @Value
     public static class Status implements Serializable {
-    
-    
         private static final long serialVersionUID = 1440057195675543637L;
-        Integer code;
+        
+        String code;
         String message;
     }
 }
