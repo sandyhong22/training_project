@@ -14,11 +14,12 @@ import java.util.Collection;
 @Entity
 @Table(name = "user")
 public class User implements UserDetails {
-
+    
+    private static final long serialVersionUID = -84131068951528043L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "username")
     @NotBlank
