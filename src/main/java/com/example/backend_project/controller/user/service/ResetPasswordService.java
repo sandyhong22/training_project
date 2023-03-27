@@ -25,7 +25,7 @@ public class ResetPasswordService {
             String newPassword = resetPasswordRequest.getNewPassword();
             String encodedNewPassword = passwordEncoder.encode(newPassword);
             user.setPassword(encodedNewPassword);
-            userRepository.save(user);
+            userRepository.updatePassword(encodedNewPassword,username);
             return "Password changed successfully";
         } else {
             return "Password change failed";
