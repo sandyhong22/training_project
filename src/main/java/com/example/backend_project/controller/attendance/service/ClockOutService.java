@@ -21,14 +21,15 @@ public class ClockOutService {
     public AttendanceResponse clockOutService(UserProfileVo userProfileVo) {
 
         String username = userProfileVo.getUsername();
-        LocalDateTime clockOutTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
         LocalDate date = LocalDate.now();
 
         if (attendanceRepository.existClockOutTimeByUsernameAndDate(username, date).isPresent()) {
             throw new AttendanceException("Today was already clock out");
         }
 
-        attendanceRepository.clockOut(clockOutTime, username, date);
-        return attendanceMapper.mapToResponse(username, clockOutTime);
+        attendanceRepository.clockOut(currentTime, username, date);
+
+        return attendanceMapper.mapToResponse(username, currentTime);
     }
 }

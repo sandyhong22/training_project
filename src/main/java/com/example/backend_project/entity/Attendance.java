@@ -30,4 +30,10 @@ public class Attendance implements Serializable {
 
     @Column(name = "date")
     private LocalDate date;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @Column(name="last_modified_date")
+    private LocalDateTime lastModifiedDate;
 }

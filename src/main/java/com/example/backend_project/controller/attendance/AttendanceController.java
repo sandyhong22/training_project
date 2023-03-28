@@ -2,10 +2,9 @@ package com.example.backend_project.controller.attendance;
 
 import com.example.backend_project.controller.attendance.dto.reponse.AttendanceResponse;
 import com.example.backend_project.controller.attendance.dto.reponse.AttendanceTotalResponse;
-import com.example.backend_project.controller.attendance.service.AttendanceRecordsService;
-import com.example.backend_project.controller.attendance.service.ClockInService;
-import com.example.backend_project.controller.attendance.service.ClockOutService;
-import com.example.backend_project.controller.attendance.service.GetAttendanceByUsernameService;
+import com.example.backend_project.controller.attendance.dto.request.AttendanceAddRequest;
+import com.example.backend_project.controller.attendance.dto.request.AttendanceRequest;
+import com.example.backend_project.controller.attendance.service.*;
 import com.example.backend_project.dto.ResponseDto;
 import com.example.backend_project.dto.UserDto;
 import com.example.backend_project.dto.UserProfileVo;
@@ -14,11 +13,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
@@ -31,14 +33,18 @@ public class AttendanceController {
 
     private final ClockOutService clockOutService;
 
-    private final AttendanceRecordsService attendanceRecordsService;
+    private final AttendanceAddService attendanceAddService;
 
     private final GetAttendanceByUsernameService getAttendanceByUsernameService;
 
+    private final GetAttendanceByDateService getAttendanceByDateService;
 
-    @GetMapping()
-    public ResponseDto<List<AttendanceTotalResponse>> attendance() {
-        return ResponseDto.success(attendanceRecordsService.getAttendanceRecords());
+    private final AttendanceRecordsService attendanceRecordsService;
+
+
+    @GetMapping("/date/")
+    public ResponseDto<List<AttendanceTotalResponse>> attendanceByDate(@RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseDto.success(getAttendanceByDateService.getAttendanceByDate(date));
     }
 
     @PostMapping("/clockIn")
@@ -63,8 +69,13 @@ public class AttendanceController {
         return ResponseDto.success(clockOutService.clockOutService(userProfileVo));
     }
 
-    @GetMapping("/{username}")
-    public List<Attendance> getAttendanceByUsername(@PathVariable("username") String username) {
-        return getAttendanceByUsernameService.getAttendanceByUsername(username);
+    @PostMapping("/attendanceAdd")
+    public ResponseDto<String> attendanceAdd(@RequestBody AttendanceAddRequest attendanceAddRequest) {
+        return ResponseDto.success(attendanceAddService.attendanceAdd(attendanceAddRequest));
+    }
+
+    @GetMapping("/getByUsernameAndDate")
+    public ResponseDto<List<Attendance>> getAttendanceByUsername(@RequestBody AttendanceRequest attendanceRequest) {
+        return ResponseDto.success(getAttendanceByUsernameService.getAttendanceByUsernameAndDate(attendanceRequest));
     }
 }

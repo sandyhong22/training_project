@@ -6,7 +6,7 @@ CREATE TABLE `user`
     `email`              varchar(45)  NOT NULL,
     `password`           varchar(256) NOT NULL,
     `created_date`       timestamp(6) NOT NULL,
-    `last_modified_date` timestamp(6) NOT NULL,
+    `last_modified_date` timestamp(6),
     `name`               varchar(255) NOT NULL,
     `role`               varchar(45)  NOT NULL,
     PRIMARY KEY (`user_id`),
@@ -15,19 +15,23 @@ CREATE TABLE `user`
 
 CREATE TABLE `attendance`
 (
-    `id`             int unsigned NOT NULL AUTO_INCREMENT,
-    `username`       varchar(45) NOT NULL,
-    `date`           date        NOT NULL,
-    `clock_in_time`  timestamp(6),
-    `clock_out_time` timestamp(6),
+    `id`                 int unsigned NOT NULL AUTO_INCREMENT,
+    `username`           varchar(45)  NOT NULL,
+    `date`               date         NOT NULL,
+    `clock_in_time`      timestamp(6),
+    `clock_out_time`     timestamp(6),
+    `created_date`       timestamp(6) NOT NULL,
+    `last_modified_date` timestamp(6),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `attendance_records`
 (
-    `id`          int         NOT NULL AUTO_INCREMENT,
-    `username`    varchar(45) NOT NULL,
-    `work_record` varchar(45) NOT NULL,
-    `date`        date        NOT NULL,
+    `id`                 int          NOT NULL AUTO_INCREMENT,
+    `username`           varchar(45)  NOT NULL,
+    `work_record`        varchar(45)  NOT NULL,
+    `date`               date         NOT NULL,
+    `created_date`       timestamp(6) NOT NULL,
+    `last_modified_date` timestamp(6),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

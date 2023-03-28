@@ -8,6 +8,7 @@ import com.example.backend_project.mapper.AttendanceMapper;
 import com.example.backend_project.repository.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@EnableAsync
 public class ClockInService {
 
     private final AttendanceRepository attendanceRepository;
@@ -29,13 +31,14 @@ public class ClockInService {
         }
         Attendance attendance = new Attendance();
         String username = userProfileVo.getUsername();
-        LocalDateTime clockInTime = LocalDateTime.now();
+        LocalDateTime currentTime = LocalDateTime.now();
         attendance.setUsername(username);
-        attendance.setClockInTime(clockInTime);
+        attendance.setClockInTime(currentTime);
         attendance.setDate(date);
+        attendance.setCreatedDate(currentTime);
         attendanceRepository.save(attendance);
 
-        return attendanceMapper.mapToResponse(username, clockInTime);
+        return attendanceMapper.mapToResponse(username, currentTime);
     }
 
 }

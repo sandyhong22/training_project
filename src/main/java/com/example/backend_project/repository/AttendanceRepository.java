@@ -13,9 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
-
-    List<Attendance> findAllByUsername(String username);
-
     List<Attendance> findAllByDate(LocalDate date);
 
     @Query(value = "SELECT a FROM Attendance AS a WHERE a.username= :username AND a.date= :date")
@@ -24,8 +21,21 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     @Query(value = "SELECT a.clockOutTime FROM Attendance AS a WHERE a.username= :username AND a.date= :date")
     Optional<Attendance> existClockOutTimeByUsernameAndDate(@Param("username") String username, @Param("date") LocalDate date);
 
+    @Query(value = "SELECT a FROM Attendance AS a WHERE a.username IN (:usernames) AND a.date=:date")
+    List<Attendance> findAllByUsernameAndDate(List<String> usernames, LocalDate date);
+
     @Transactional
     @Modifying
-    @Query(value = "UPDATE Attendance AS a SET a.clockOutTime=:clockOutTime  WHERE a.username=:username AND a.date=:date")
-    void clockOut(@Param("clockOutTime") LocalDateTime clockOutTime, @Param("username") String username, @Param("date") LocalDate date);
+    @Query(value = "UPDATE Attendance AS a SET a.clockOutTime=:currentTime,a.lastModifiedDate=:currentTime  WHERE a.username=:username AND a.date=:date")
+    void clockOut(@Param("clockOutTime") LocalDateTime currentTime, @Param("username") String username, @Param("date") LocalDate date);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Attendance AS a SET a.clockInTime=:clockInTime,a.lastModifiedDate=:clockInTime  WHERE a.username=:username AND a.date=:date")
+    void updateClockInTime(@Param("clockOutTime") LocalDateTime clockInTime, @Param("username") String username, @Param("date") LocalDate date);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Attendance AS a SET a.clockOutTime=:clockOutTime,a.lastModifiedDate=:clockOutTime  WHERE a.username=:username AND a.date=:date")
+    void updateClockOutTime(@Param("clockOutTime") LocalDateTime clockOutTime, @Param("username") String username, @Param("date") LocalDate date);
 }
