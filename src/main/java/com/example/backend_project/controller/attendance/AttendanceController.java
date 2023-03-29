@@ -42,7 +42,7 @@ public class AttendanceController {
     private final AttendanceRecordsService attendanceRecordsService;
 
 
-    @GetMapping("/date/")
+    @GetMapping("records/")
     public ResponseDto<List<AttendanceTotalResponse>> attendanceByDate(@RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseDto.success(getAttendanceByDateService.getAttendanceByDate(date));
     }
