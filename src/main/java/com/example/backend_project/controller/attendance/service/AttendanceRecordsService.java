@@ -39,7 +39,6 @@ public class AttendanceRecordsService {
         List<AttendanceRecord> attendanceRecordList = attendanceRecord(todayAttendanceList).get();
         attendanceRecordsRepository.saveAll(attendanceRecordList);
         return attendanceMapper.mapToResponse(attendanceRecordList);
-
     }
 
     private String checkAttendanceTime(Attendance attendance) {
@@ -63,25 +62,26 @@ public class AttendanceRecordsService {
     }
 
     public CompletableFuture<List<AttendanceRecord>> attendanceRecord(List<Attendance> todayAttendanceList) {
-        log.info("Enter in CompletableFuture");
+        log.info("Thread Task start");
 
-        CompletableFuture<List<AttendanceRecord>> attendanceRecordsListEnterCompletableFuture = new CompletableFuture<>();
-        List<AttendanceRecord> attendanceRecordList = new ArrayList<>();
+        List<CompletableFuture<AttendanceRecord>> attendanceRecordFutures = new ArrayList<>();
         for (Attendance attendance : todayAttendanceList) {
-            attendanceRecordsListEnterCompletableFuture = CompletableFuture.supplyAsync(() -> {
-                log.info("CompletableFuture{},", attendance);
-                AttendanceRecord attendanceRecord = setAttendance(attendance);
-                attendanceRecordList.add(attendanceRecord);
-                return attendanceRecordList;
-
-            }, EXECUTOR);
+            CompletableFuture<AttendanceRecord> attendanceRecordFuture = CompletableFuture.supplyAsync(() -> setAttendance(attendance), EXECUTOR);
+            attendanceRecordFutures.add(attendanceRecordFuture);
         }
-        CompletableFuture.allOf(attendanceRecordsListEnterCompletableFuture)
-                .thenRun(() -> log.info("Task completed"))
-                .join();
 
-        return attendanceRecordsListEnterCompletableFuture;
+        CompletableFuture<List<AttendanceRecord>> allAttendanceRecordsFuture = CompletableFuture.allOf(attendanceRecordFutures.toArray(new CompletableFuture[0]))
+                .thenApply(v -> {
+                    List<AttendanceRecord> attendanceRecordsList = new ArrayList<>();
+                    for (CompletableFuture<AttendanceRecord> future : attendanceRecordFutures) {
+                        attendanceRecordsList.add(future.join());
+                    }
+                    return attendanceRecordsList;
+                });
+
+        allAttendanceRecordsFuture.thenRun(() -> log.info("Thread Task completed"));
+
+
+        return allAttendanceRecordsFuture;
     }
-
-
 }
