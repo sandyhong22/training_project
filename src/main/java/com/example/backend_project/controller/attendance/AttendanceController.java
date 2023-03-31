@@ -41,6 +41,8 @@ public class AttendanceController {
 
     private final AttendanceRecordsService attendanceRecordsService;
 
+    private final FailCheckInService failCheckInService;
+
 
     @GetMapping("records/")
     public ResponseDto<List<AttendanceTotalResponse>> attendanceByDate(@RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -78,4 +80,16 @@ public class AttendanceController {
     public ResponseDto<List<Attendance>> getAttendanceByUsername(@RequestBody AttendanceRequest attendanceRequest) {
         return ResponseDto.success(getAttendanceByUsernameService.getAttendanceByUsernameAndDate(attendanceRequest));
     }
+
+    @PostMapping("/fail/clockIn")
+    public ResponseDto<AttendanceResponse> failClockIn(@AuthenticationPrincipal UserDto user,
+                                                   @Parameter(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION) String bearerToken) {
+        UserProfileVo userProfileVo = new UserProfileVo();
+        userProfileVo.setName(user.getName());
+        userProfileVo.setEmail(user.getEmail());
+        userProfileVo.setUsername(user.getUsername());
+        userProfileVo.setBearerToken(bearerToken);
+        return ResponseDto.success(failCheckInService.failClockInService(userProfileVo));
+    }
+
 }

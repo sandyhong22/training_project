@@ -1,6 +1,7 @@
 package com.example.backend_project.controller;
 
 import com.example.backend_project.dto.ResponseDto;
+import com.example.backend_project.expection.AttendanceException;
 import com.example.backend_project.expection.InvalidTokenException;
 import com.example.backend_project.expection.LoginException;
 import com.example.backend_project.expection.UserNotFoundException;
@@ -63,7 +64,8 @@ public class ExceptionController {
             UserNotFoundException.class,
             AuthenticationException.class,
             ExpiredJwtException.class,
-            Exception.class
+            Exception.class,
+            AttendanceException.class
     })
 
 
