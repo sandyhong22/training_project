@@ -1,6 +1,5 @@
 package com.example.backend_project.controller.attendance.service;
 
-import com.example.backend_project.controller.attendance.dto.reponse.AttendanceTotalResponse;
 import com.example.backend_project.entity.Attendance;
 import com.example.backend_project.entity.AttendanceRecord;
 import com.example.backend_project.mapper.AttendanceMapper;
@@ -11,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,11 +34,12 @@ public class AttendanceRecordsService {
 
     private final AttendanceMapper attendanceMapper;
 
-    public List<AttendanceTotalResponse> getAttendanceRecords() throws ExecutionException, InterruptedException {
+    @Transactional
+    public void getAttendanceRecords() throws ExecutionException, InterruptedException {
         List<Attendance> todayAttendanceList = attendanceRepository.findAllByDate(LocalDate.now().minusDays(1));
         List<AttendanceRecord> attendanceRecordList = attendanceRecord(todayAttendanceList).get();
         attendanceRecordsRepository.saveAll(attendanceRecordList);
-        return attendanceMapper.mapToResponse(attendanceRecordList);
+        attendanceMapper.mapToResponse(attendanceRecordList);
     }
 
     private String checkAttendanceTime(Attendance attendance) {
