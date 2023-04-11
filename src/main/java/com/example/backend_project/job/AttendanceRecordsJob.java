@@ -18,7 +18,7 @@ public class AttendanceRecordsJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) {
         log.info("attendanceRecordsJob started");
         try {
-            attendanceRecordsService.getAttendanceRecords();
+            attendanceRecordsService.executeAttendanceRecords();
         } catch (Exception e) {
             log.error("Error in AttendanceRecordsJob:{}", e.getMessage());
         }

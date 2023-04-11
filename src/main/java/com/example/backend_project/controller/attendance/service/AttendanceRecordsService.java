@@ -35,11 +35,10 @@ public class AttendanceRecordsService {
     private final AttendanceMapper attendanceMapper;
 
     @Transactional
-    public void getAttendanceRecords() throws ExecutionException, InterruptedException {
+    public void executeAttendanceRecords() throws ExecutionException, InterruptedException {
         List<Attendance> todayAttendanceList = attendanceRepository.findAllByDate(LocalDate.now().minusDays(1));
         List<AttendanceRecord> attendanceRecordList = attendanceRecord(todayAttendanceList).get();
         attendanceRecordsRepository.saveAll(attendanceRecordList);
-        attendanceMapper.mapToResponse(attendanceRecordList);
     }
 
     private String checkAttendanceTime(Attendance attendance) {

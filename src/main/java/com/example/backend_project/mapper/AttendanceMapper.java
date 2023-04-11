@@ -30,21 +30,6 @@ public class AttendanceMapper {
         return attendanceTotalResponse;
     }
 
-    public List<AttendanceTotalResponse> mapToResponse(List<AttendanceRecord> attendanceRecordList) {
-        List<AttendanceTotalResponse> attendanceTotalResponseList=new ArrayList<>();
-        for(AttendanceRecord  attendanceRecord:attendanceRecordList){
-            AttendanceTotalResponse attendanceTotalResponse = new AttendanceTotalResponse();
-            attendanceTotalResponse.setUsername(attendanceRecord.getUsername());
-            attendanceTotalResponse.setDate(attendanceRecord.getDate());
-            attendanceTotalResponse.setWorkRecords(attendanceRecord.getWorkRecord());
-            attendanceTotalResponse.setCreatedDate(attendanceRecord.getCreatedDate());
-            attendanceTotalResponse.setLastModifiedDate(attendanceRecord.getLastModifiedDate());
-            attendanceTotalResponseList.add(attendanceTotalResponse);
-
-        }
-        return attendanceTotalResponseList;
-    }
-
 }
 
 
